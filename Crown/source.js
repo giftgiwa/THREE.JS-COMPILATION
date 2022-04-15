@@ -8,7 +8,6 @@ const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.inner
 camera.position.z = 15;
 camera.position.y = 4;
 
-
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setPixelRatio( window.devicePixelRatio * 2);
@@ -20,12 +19,19 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 let controls = new OrbitControls(camera, renderer.domElement)
 controls.maxPolarAngle = Math.PI/2 - 0.1; 
 
+let newMaterial = new THREE.MeshPhysicalMaterial({  
+	roughness: 0.3,   
+	transmission: 1,  
+	thickness: 1
+  });
+
 const loader = new GLTFLoader();
-let crown = new THREE.Object3D();
+let crown = new THREE.Mesh();
 loader.load( './BLENDERCROWN.gltf', function ( gltf ) {
 	gltf.scene.traverse(function(model) { //for gltf shadows!
 		if (model.isMesh) {
 		  model.castShadow = true;
+		  model.material = newMaterial;
 		}
 	});
 	crown = gltf.scene;
@@ -36,9 +42,7 @@ loader.load( './BLENDERCROWN.gltf', function ( gltf ) {
 	console.error( error );
 } );
 
-const geometry = new THREE.PlaneGeometry(10000, 10000)
-const material = new THREE.MeshLambertMaterial( {color: 0xf0f0f0/*, depthWrite: false*/} );
-const plane = new THREE.Mesh( geometry, material );
+const plane = new THREE.Mesh( new THREE.PlaneGeometry(10000, 10000), new THREE.MeshLambertMaterial( {color: 0xf0f0f0/*, depthWrite: false*/} ) );
 plane.castShadow = true;
 plane.receiveShadow = true
 plane.rotation.x=THREE.Math.degToRad(-90)
@@ -58,15 +62,9 @@ light.shadow.camera.right = d;
 light.shadow.camera.top = d;
 light.shadow.camera.bottom = - d;
 
-const helper = new THREE.CameraHelper( light.shadow.camera )
-//scene.add(helper)
-const helper2 = new THREE.DirectionalLightHelper( light, 5 );
-//scene.add( helper2);
-
 const hemiLight = new THREE.HemisphereLight( 0x828282, 0x444444 );
 hemiLight.position.set( 0, 20, 0 );
 scene.add( hemiLight );
-
 
 function animate() { //render
 	requestAnimationFrame( animate );
