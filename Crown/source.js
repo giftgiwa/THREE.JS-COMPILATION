@@ -19,11 +19,11 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 let controls = new OrbitControls(camera, renderer.domElement)
 controls.maxPolarAngle = Math.PI/2 - 0.1; 
 
-let newMaterial = new THREE.MeshPhysicalMaterial({  
+/*let newMaterial = new THREE.MeshPhysicalMaterial({  
 	roughness: 0.3,   
 	transmission: 1,  
 	thickness: 1
-  });
+  });*/
 
 const loader = new GLTFLoader();
 let crown = new THREE.Mesh();
@@ -31,7 +31,6 @@ loader.load( './BLENDERCROWN.gltf', function ( gltf ) {
 	gltf.scene.traverse(function(model) { //for gltf shadows!
 		if (model.isMesh) {
 		  model.castShadow = true;
-		  model.material = newMaterial;
 		}
 	});
 	crown = gltf.scene;
