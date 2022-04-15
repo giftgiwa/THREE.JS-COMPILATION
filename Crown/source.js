@@ -19,12 +19,6 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 let controls = new OrbitControls(camera, renderer.domElement)
 controls.maxPolarAngle = Math.PI/2 - 0.1; 
 
-/*let newMaterial = new THREE.MeshPhysicalMaterial({  
-	roughness: 0.3,   
-	transmission: 1,  
-	thickness: 1
-  });*/
-
 const loader = new GLTFLoader();
 let crown = new THREE.Mesh();
 loader.load( './BLENDERCROWN.gltf', function ( gltf ) {
@@ -41,7 +35,7 @@ loader.load( './BLENDERCROWN.gltf', function ( gltf ) {
 	console.error( error );
 } );
 
-const plane = new THREE.Mesh( new THREE.PlaneGeometry(10000, 10000), new THREE.MeshLambertMaterial( {color: 0xf0f0f0/*, depthWrite: false*/} ) );
+const plane = new THREE.Mesh( new THREE.PlaneGeometry(10000, 10000), new THREE.MeshLambertMaterial( {color: 0xf0f0f0} ) );
 plane.castShadow = true;
 plane.receiveShadow = true
 plane.rotation.x=THREE.Math.degToRad(-90)
