@@ -32,7 +32,7 @@ const equatorMaterial = new THREE.MeshStandardMaterial({color: 0x242526, metalne
 
 const loader = new GLTFLoader();
 //let ball = new THREE.InstancedMesh({count: 3});
-let ball;
+
 loader.load( './ball.gltf', function ( gltf ) {
 	gltf.scene.traverse(function(model) { //for gltf shadows!
 		if (model.isMesh) {
@@ -40,15 +40,11 @@ loader.load( './ball.gltf', function ( gltf ) {
 		  model.material = sphereMaterial;
 		}
 	});
-	ball = gltf.scene
-	ball = new THREE.InstancedMesh(ball.geometry, ball.material, 10)
-    scene.add( ball );
+	
+	let ball = new THREE.InstancedMesh(gltf, sphereMaterial, 10)
+	
 
-	for (let i = 0; i < 5; i++) {
-		let newBall = ball.clone()
-		scene.add(newBall)
-		newBall.position.set(Math.floor(Math.random() * 20) * 2 - 10, Math.floor(Math.random() * 20) * 3 - 10, Math.floor(Math.random() * 20) * 2 - 10)
-	}
+	
 	
 }, undefined, function ( error ) {
 	console.error( error );
