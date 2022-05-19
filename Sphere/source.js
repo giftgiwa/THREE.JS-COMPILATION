@@ -75,8 +75,8 @@ for (let i = 0; i <= 4; i++) {
 		equator = gltf2.scene
 
 		equator.position.set(pos_x, pos_y, pos_z)
-
 		equator.scale.set(scale, scale, scale)
+		
 		scene.add( equator )
 		
 	}, undefined, function ( error ) {
