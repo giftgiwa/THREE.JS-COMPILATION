@@ -33,7 +33,7 @@ const equatorMaterial = new THREE.MeshStandardMaterial({color: 0x242526, metalne
 
 const loader = new GLTFLoader();
 const manager = new THREE.LoadingManager();
-let pos_arr = [] // to be filled with positions of spheres
+var pos_arr = [] // to be filled with positions of spheres
 let pos = new THREE.Vector3()
 
 //spheres and equators (WIP)
@@ -88,20 +88,14 @@ for (let i = 1; i <= 12; i++) {
 const light = new THREE.AmbientLight( 0xffffff );
 scene.add( light );
 
-let period = 5
-let clock = new THREE.Clock();
-let matrix = new THREE.Matrix4();
-
-console.log(pos_arr)
 
 let y_axis_dist = []
 for (let j = 0; j < pos_arr.length; j++) {
 	y_axis_dist.push(pos_arr[j][2].distanceTo(new THREE.Vector3(0, pos_arr[j][2].y ,0)))
 }
-console.log(y_axis_dist)
 
 //render
-let x = 0;
+
 console.log(pos_arr)
 function animate() {
 	requestAnimationFrame( animate );
@@ -115,8 +109,8 @@ function animate() {
 		
 	}*/
 	
-	pos_arr[0][0].position.set(x, 0, 0)
-	x += 0.1
+	pos_arr[0][1].rotation.x += 0.01
+
 	
 
 
