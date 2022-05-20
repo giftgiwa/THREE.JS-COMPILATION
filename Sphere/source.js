@@ -5,18 +5,22 @@ import { RGBELoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/l
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff);
-const camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.position.z = -60;
 camera.position.y = 6;
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
-renderer.setPixelRatio( window.devicePixelRatio * 4);
+renderer.setPixelRatio( window.devicePixelRatio * 2);
 document.body.appendChild( renderer.domElement );
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
+console.log(window.innerWidth, window.innerHeight)
+
+//orbit controls
 let controls = new OrbitControls(camera, renderer.domElement)
+
 
 //HDRI MAP
 const hdrEquirect = new RGBELoader().load(
@@ -38,7 +42,7 @@ let pos_arr = [] // to be filled with positions of spheres
 let ball = new THREE.Mesh();
 let equator = new THREE.Mesh()
 
-for (let i = 0; i <= 4; i++) {
+for (let i = 1; i <= 12; i++) {
 
 	let scale = Math.floor(Math.random() * 3) + 1
 
@@ -55,9 +59,7 @@ for (let i = 0; i <= 4; i++) {
 			}
 		});
 		ball = gltf.scene
-		
 		ball.position.set(pos_x, pos_y, pos_z)
-	
 		ball.scale.set(scale, scale, scale)
 		scene.add( ball );
 		
@@ -73,10 +75,8 @@ for (let i = 0; i <= 4; i++) {
 			}
 		});
 		equator = gltf2.scene
-
 		equator.position.set(pos_x, pos_y, pos_z)
 		equator.scale.set(scale, scale, scale)
-		
 		scene.add( equator )
 		
 	}, undefined, function ( error ) {
@@ -87,7 +87,8 @@ for (let i = 0; i <= 4; i++) {
 
 console.log(pos_arr[1])
 
-
+const axesHelper = new THREE.AxesHelper( 5 );
+scene.add( axesHelper );
 
 
 
@@ -95,12 +96,37 @@ console.log(pos_arr[1])
 const light = new THREE.AmbientLight( 0xffffff );
 scene.add( light );
 
+let period = 5
+let clock = new THREE.Clock();
+let matrix = new THREE.Matrix4();
+
 //render
 function animate() {
 	requestAnimationFrame( animate );
-	ball.position.y += 0.5
-	if (ball.position.y >= 40)
-		ball.position.y = -40
+	//camera.lookAt(0, 0, 60)
+	   //Math.random() * 0.5
+	//pos_arr[0][0].position
+	//declared once at the top of your code
+
+	var axis = new THREE.Vector3(0,0.5,0);//tilted a bit on x and y - feel free to plug your different axis here
+	//in your update/draw function
+	
+
+	/*for (let j = 0; j < pos_arr.length; j++) {
+		let movement = Math.random() * 0.5
+		pos_arr[j][0].position.y += movement
+		pos_arr[j][1].position.y += movement
+		if (pos_arr[j][0].position.y >= 40) {
+			pos_arr[j][0].position.y = -40
+			pos_arr[j][0].position.y = -40
+		}
+	}*/
+
+	//matrix.makeRotationY(clock.getDelta() * 2 * Math.PI / period);
+	//camera.position.applyMatrix4(matrix);	
+	//camera.lookAt(0, 0, 0);	
+	//console.log(equator.rotation)
+	
 	renderer.render( scene, camera );
 }
 animate();
