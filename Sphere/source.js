@@ -3,6 +3,7 @@ import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/l
 import {OrbitControls} from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/OrbitControls.js'
 import { RGBELoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/RGBELoader.js';
 
+//starter
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff);
 const camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -25,6 +26,7 @@ const hdrEquirect = new RGBELoader().load(
 	() => { hdrEquirect.mapping = THREE.EquirectangularReflectionMapping; }
 );
 
+//materials
 const sphereMaterial = new THREE.MeshPhysicalMaterial({color: 0xdce0e6, 
 	metalness:0, opacity:1.0, transmission:1, envMap: hdrEquirect, 
 	roughness:0, depthTest: true} )
@@ -32,13 +34,16 @@ const equatorMaterial = new THREE.MeshStandardMaterial({color: 0x242526, metalne
 	opacity:0.8, roughness:0.8} )
 
 const loader = new GLTFLoader();
-const manager = new THREE.LoadingManager();
+const manager = new THREE.LoadingManager(); //loading manager
 
-let n 
+manager.onLoad = function(e) {
+	pos_arr.push(e)
+}
+
 let pos_arr = [] // to be filled with positions of spheres
 let pos = new THREE.Vector3()
 
-//spheres and equators (WIP)
+//spheres and equators   (WIP)
 let ball = new THREE.Mesh();
 let equator = new THREE.Mesh()
 
@@ -61,7 +66,9 @@ for (let i = 1; i <= 12; i++) {
 		ball = gltf.scene
 		ball.position.set(pos_x, pos_y, pos_z)
 		ball.scale.set(scale, scale, scale)
+		
 		scene.add( ball );
+
 		
 	}, undefined, function ( error ) {
 		console.error( error );
@@ -72,6 +79,7 @@ for (let i = 1; i <= 12; i++) {
 			if (model.isMesh) {
 			  model.castShadow = true
 			  model.material = equatorMaterial
+			  
 			}
 		});
 		equator = gltf2.scene
@@ -86,6 +94,7 @@ for (let i = 1; i <= 12; i++) {
 	pos_arr.push([ball, equator, pos])
 }
 
+
 //light
 const light = new THREE.AmbientLight( 0xffffff );
 scene.add( light );
@@ -96,9 +105,10 @@ let y_axis_dist = []
 for (let j = 0; j < pos_arr.length; j++) {
 	y_axis_dist.push(pos_arr[j][2].distanceTo(new THREE.Vector3(0, pos_arr[j][2].y , 0)))
 }
-console.log(y_axis_dist)
+//console.log(y_axis_dist)
 
-console.log(pos_arr[0])
+
+
 //render
 
 function animate() {
