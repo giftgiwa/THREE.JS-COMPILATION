@@ -33,7 +33,9 @@ const equatorMaterial = new THREE.MeshStandardMaterial({color: 0x242526, metalne
 
 const loader = new GLTFLoader();
 const manager = new THREE.LoadingManager();
-var pos_arr = [] // to be filled with positions of spheres
+
+let n 
+let pos_arr = [] // to be filled with positions of spheres
 let pos = new THREE.Vector3()
 
 //spheres and equators (WIP)
@@ -54,7 +56,6 @@ for (let i = 1; i <= 12; i++) {
 			if (model.isMesh) {
 			model.castShadow = true;
 			model.material = sphereMaterial;
-			pos_arr.push(model)
 			}
 		});
 		ball = gltf.scene
@@ -76,11 +77,12 @@ for (let i = 1; i <= 12; i++) {
 		equator = gltf2.scene
 		equator.position.set(pos_x, pos_y, pos_z)
 		equator.scale.set(scale, scale, scale)
-		scene.add( equator )
 		
+		scene.add( equator )
 	}, undefined, function ( error ) {
 		console.error( error )
 	} );
+
 	pos_arr.push([ball, equator, pos])
 }
 
@@ -88,20 +90,23 @@ for (let i = 1; i <= 12; i++) {
 const light = new THREE.AmbientLight( 0xffffff );
 scene.add( light );
 
+console.log(pos_arr)
 
 let y_axis_dist = []
 for (let j = 0; j < pos_arr.length; j++) {
 	y_axis_dist.push(pos_arr[j][2].distanceTo(new THREE.Vector3(0, pos_arr[j][2].y , 0)))
 }
+console.log(y_axis_dist)
 
+console.log(pos_arr[0])
 //render
 
-console.log(pos_arr)
 function animate() {
 	requestAnimationFrame( animate );
 	//camera.lookAt(0, 0, 60)
-	   //Math.random() * 0.5
-	pos_arr[0][1].position.x += 0.1
+	
+
+	pos_arr[0][0].position.x = 0.01
 
 	
 	/*for (let a = 0; a < pos_arr.length; a++) {
