@@ -91,7 +91,7 @@ scene.add( light );
 
 let y_axis_dist = []
 for (let j = 0; j < pos_arr.length; j++) {
-	y_axis_dist.push(pos_arr[j][2].distanceTo(new THREE.Vector3(0, pos_arr[j][2].y ,0)))
+	y_axis_dist.push(pos_arr[j][2].distanceTo(new THREE.Vector3(0, pos_arr[j][2].y , 0)))
 }
 
 //render
@@ -101,7 +101,8 @@ function animate() {
 	requestAnimationFrame( animate );
 	//camera.lookAt(0, 0, 60)
 	   //Math.random() * 0.5
-	//pos_arr[0][0].position
+	pos_arr[0][1].position.x += 0.1
+
 	
 	/*for (let a = 0; a < pos_arr.length; a++) {
 		let rot_fac = Math.random() * 0.5
@@ -109,15 +110,6 @@ function animate() {
 		
 	}*/
 	
-	pos_arr[0][1].rotation.x += 0.01
-
-	
-
-
-
-	
-
-
 
 	//matrix.makeRotationY(clock.getDelta() * 2 * Math.PI / period);
 	//camera.position.applyMatrix4(matrix);	
