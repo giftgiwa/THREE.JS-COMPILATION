@@ -99,9 +99,7 @@ for (let i = 1; i <= 12; i++) {
 const light = new THREE.AmbientLight( 0xffffff );
 scene.add( light );
 
-console.log(pos_arr)
 
-console.log(pos_arr.length)
 
 let y_axis_dist = []
 for (let j = 0; j < pos_arr.length; j++) {
