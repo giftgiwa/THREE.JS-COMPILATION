@@ -37,15 +37,7 @@ const manager = new THREE.LoadingManager(); //loading manager
 const loader = new GLTFLoader(manager);
 
 let pos_arr = []
-manager.onLoad = function(e) {
-	
 
-	scene.traverse( function (model) {
-		if (model.isMesh) {
-			pos_arr.push(model)
-		}
-	})
-}
 
 
 let pos = new THREE.Vector3()
