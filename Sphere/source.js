@@ -6,13 +6,13 @@ import { RGBELoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/l
 //starter
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff);
-const camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.position.z = -60;
 camera.position.y = 6;
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
-renderer.setPixelRatio( window.devicePixelRatio * 2);
+//renderer.setPixelRatio( window.devicePixelRatio * 2);
 document.body.appendChild( renderer.domElement );
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -35,25 +35,17 @@ const equatorMaterial = new THREE.MeshStandardMaterial({color: 0x242526, metalne
 
 const manager = new THREE.LoadingManager(); //loading manager
 const loader = new GLTFLoader(manager);
+                                                                                                                  
+let all = [...Array(12)].map(e => Array(2).fill(new THREE.Mesh()))
+console.log(all)
+let positions = [] 
 
-let pos_arr = []
-
-
-
-let pos = new THREE.Vector3()
-
-//spheres and equators   (WIP)
-let ball = new THREE.Mesh();
-let equator = new THREE.Mesh()
-
-for (let i = 1; i <= 12; i++) {
-
+for (let i = 0; i < all.length; i++) {
+	
 	let scale = Math.floor(Math.random() * 3) + 1
-
-	let pos_x = Math.floor(Math.random() * 10) * 5 - 25
-	let pos_y = Math.floor(Math.random() * 10) * 5 - 25
-	let pos_z = Math.floor(Math.random() * 10) * 5 - 25
-	pos = new THREE.Vector3(pos_x, pos_y, pos_z)
+	let pos_x = Math.floor(Math.random() * 9) * 5 - 25
+	let pos_y = Math.floor(Math.random() * 9) * 5 - 25
+	let pos_z = Math.floor(Math.random() * 9) * 5 - 25
 
 	loader.load( './ball.gltf', function ( gltf ) { //load sphere
 		gltf.scene.traverse(function(model) {
@@ -62,66 +54,67 @@ for (let i = 1; i <= 12; i++) {
 			model.material = sphereMaterial;
 			}
 		});
-		ball = gltf.scene
-		ball.position.set(pos_x, pos_y, pos_z)
-		ball.scale.set(scale, scale, scale)
-		
-		scene.add( ball );
 
-		
+		let pos = new THREE.Vector3(pos_x, pos_y, pos_z)
+		positions.push(pos.distanceTo(new THREE.Vector3(0, pos.y , 0))) //log of distances between meshes and y-axis
+
+		all[i][0] = gltf.scene
+		all[i][0].position.set(pos_x, pos_y, pos_z)
+		all[i][0].scale.set(scale, scale, scale)
+
+		scene.add( all[i][0] )	
 	}, undefined, function ( error ) {
 		console.error( error );
-	} );	
-
-	loader.load( './equator.gltf', function ( gltf2 ) {
-		gltf2.scene.traverse(function(model) { //for gltf shadows!
-			if (model.isMesh) {
-			  model.castShadow = true
-			  model.material = equatorMaterial
-			  
-			}
-		});
-		equator = gltf2.scene
-		equator.position.set(pos_x, pos_y, pos_z)
-		equator.scale.set(scale, scale, scale)
-		
-		scene.add( equator )
-	}, undefined, function ( error ) {
-		console.error( error )
 	} );
 
-	//pos_arr.push([ball, equator, pos])
+	loader.load( './equator.gltf', function ( gltf ) { //load sphere
+		gltf.scene.traverse(function(model) {
+			if (model.isMesh) {
+			model.castShadow = true;
+			model.material = equatorMaterial;
+			}
+		});
+		
+		all[i][1] = gltf.scene
+		all[i][1].position.set(pos_x, pos_y, pos_z)
+		all[i][1].scale.set(scale, scale, scale)
+
+		scene.add( all[i][1] )	
+	}, undefined, function ( error ) {
+		console.error( error );
+	} );
 }
-
-
 
 //light
 const light = new THREE.AmbientLight( 0xffffff );
 scene.add( light );
 
 
-
-let y_axis_dist = []
-for (let j = 0; j < pos_arr.length; j++) {
-	y_axis_dist.push(pos_arr[j][2].distanceTo(new THREE.Vector3(0, pos_arr[j][2].y , 0)))
-}
 //console.log(y_axis_dist)
 
 
-
 //render
-
 function animate() {
 	requestAnimationFrame( animate );
 	//camera.lookAt(0, 0, 60)
-	
+	for (let j = 0; j < all.length; j++) {
+		let rot_x = Math.random() * 0.05 - 0.1
+		let movement = Math.random() * 0.2
+		all[j][0].rotation.x += rot_x
+		all[j][0].rotation.y += 0.05
+		all[j][0].position.y += movement
 
+		all[j][1].rotation.x += rot_x
+		all[j][1].rotation.y += 0.05
+		all[j][1].position.y += movement
+
+		if (all[j][0].position.y >= 50) {
+			all[j][0].position.y = -50
+			all[j][1].position.y = -50
+		}
+	}
 	
-	/*for (let a = 0; a < pos_arr.length; a++) {
-		let rot_fac = Math.random() * 0.5
-		pos_arr[a][0].position.x += 0.01
-		
-	}*/
+	
 	
 
 	//matrix.makeRotationY(clock.getDelta() * 2 * Math.PI / period);
