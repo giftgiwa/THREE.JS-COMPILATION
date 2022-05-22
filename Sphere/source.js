@@ -98,7 +98,7 @@ function animate() {
 	requestAnimationFrame( animate );
 	//camera.lookAt(0, 0, 60)
 	for (let j = 0; j < all.length; j++) {
-		let rot_x = Math.random() * 0.05 - 0.1
+		let rot_x = Math.random() * 0.01 - 0.2
 		let movement = Math.random() * 0.2
 		all[j][0].rotation.x += rot_x
 		all[j][0].rotation.y += 0.05
