@@ -1,6 +1,6 @@
 import * as THREE from 'https://cdn.skypack.dev/three@0.129.0/build/three.module.js';
 import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js';
-import {OrbitControls} from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/OrbitControls.js'
+//import {OrbitControls} from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/OrbitControls.js'
 import { RGBELoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/RGBELoader.js';
 
 //starter
@@ -18,7 +18,7 @@ renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 //orbit controls
-let controls = new OrbitControls(camera, renderer.domElement)
+//let controls = new OrbitControls(camera, renderer.domElement)
 
 //HDRI MAP
 const hdrEquirect = new RGBELoader().load(
@@ -36,7 +36,7 @@ const equatorMaterial = new THREE.MeshStandardMaterial({color: 0x242526, metalne
 const manager = new THREE.LoadingManager(); //loading manager
 const loader = new GLTFLoader(manager);
                                                                                                                   
-let all = [...Array(12)].map(e => Array(2).fill(new THREE.Mesh()))
+let all = [...Array(12)].map(e => Array(2).fill(new THREE.Mesh())) //array of spheres/equators
 console.log(all)
 let positions = [] 
 
