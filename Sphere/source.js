@@ -33,17 +33,14 @@ const sphereMaterial = new THREE.MeshPhysicalMaterial({color: 0xdce0e6,
 const equatorMaterial = new THREE.MeshStandardMaterial({color: 0x242526, metalness:1, 
 	opacity:0.8, roughness:0.8} )
 
-const manager = new THREE.LoadingManager(); //loading manager
-const loader = new GLTFLoader(manager);
+const loader = new GLTFLoader();
                                                                                                                   
 let all = [...Array(12)].map(e => Array(2).fill(new THREE.Mesh())) //array of spheres/equators
 console.log(all)
 
-let test_geometry;
-
 let positions = [] 
 
-for (let i = 0; i < 1 /*temporary*/; i++) {
+for (let i = 0; i < 12 ; i++) {
 	
 	let scale = Math.floor(Math.random() * 3) + 1
 	let pos_x = Math.floor(Math.random() * 9) * 5 - 25
@@ -54,8 +51,7 @@ for (let i = 0; i < 1 /*temporary*/; i++) {
 		gltf.scene.traverse(function(model) {
 			if (model.isMesh) {
 				model.castShadow = true;
-				//model.material = sphereMaterial;
-				geometry = model.geometry
+				model.material = sphereMaterial;
 			}
 		});
 
