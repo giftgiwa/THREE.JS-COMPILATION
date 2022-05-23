@@ -38,9 +38,12 @@ const loader = new GLTFLoader(manager);
                                                                                                                   
 let all = [...Array(12)].map(e => Array(2).fill(new THREE.Mesh())) //array of spheres/equators
 console.log(all)
+
+let test_geometry;
+
 let positions = [] 
 
-for (let i = 0; i < all.length; i++) {
+for (let i = 0; i < 1 /*temporary*/; i++) {
 	
 	let scale = Math.floor(Math.random() * 3) + 1
 	let pos_x = Math.floor(Math.random() * 9) * 5 - 25
@@ -50,8 +53,9 @@ for (let i = 0; i < all.length; i++) {
 	loader.load( './ball.gltf', function ( gltf ) { //load sphere
 		gltf.scene.traverse(function(model) {
 			if (model.isMesh) {
-			model.castShadow = true;
-			model.material = sphereMaterial;
+				model.castShadow = true;
+				//model.material = sphereMaterial;
+				geometry = model.geometry
 			}
 		});
 
@@ -104,6 +108,7 @@ function animate() {
 		all[j][0].position.y += movement
 
 		all[j][1].rotation.x += rot_x
+		all[j][1].rotation.z += rot_z
 		all[j][1].rotation.y += 0.05
 		all[j][1].position.y += movement
 
@@ -112,10 +117,6 @@ function animate() {
 			all[j][1].position.y = -50
 		}
 	}
-	
-	
-	
-
 	//matrix.makeRotationY(clock.getDelta() * 2 * Math.PI / period);
 	//camera.position.applyMatrix4(matrix);	
 	//camera.lookAt(0, 0, 0);	
