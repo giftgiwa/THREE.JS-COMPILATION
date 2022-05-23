@@ -94,9 +94,6 @@ const light = new THREE.AmbientLight( 0xffffff );
 scene.add( light );
 
 
-//console.log(y_axis_dist)
-
-
 //render
 function animate() {
 	requestAnimationFrame( animate );
