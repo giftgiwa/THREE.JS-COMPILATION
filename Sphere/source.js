@@ -1,12 +1,12 @@
 import * as THREE from 'https://cdn.skypack.dev/three@0.129.0/build/three.module.js';
 import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js';
-//import {OrbitControls} from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/OrbitControls.js'
+import {OrbitControls} from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/OrbitControls.js'
 import { RGBELoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/RGBELoader.js';
 
 //starter
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff);
-const camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.position.z = -60;
 camera.position.y = 6;
 
@@ -18,7 +18,7 @@ renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 //orbit controls
-//let controls = new OrbitControls(camera, renderer.domElement)
+let controls = new OrbitControls(camera, renderer.domElement)
 
 //HDRI MAP
 const hdrEquirect = new RGBELoader().load(
@@ -94,26 +94,27 @@ scene.add( light );
 function animate() {
 	requestAnimationFrame( animate );
 	//camera.lookAt(0, 0, 60)
-	for (let j = 0; j < all.length; j++) {
-		let rot_x = Math.random() * 0.00005 - 0.2
-		let rot_z = Math.random() * 0.00005 - 0.2
-		let movement = Math.random() * 0.2
-		all[j][0].position.y += movement
 
-		all[j][1].rotation.x += rot_x
-		all[j][1].rotation.z += rot_z
-		all[j][1].rotation.y += 0.05
+	/*let rot_x = Math.random() * 0.00005 - 0.002
+	let rot_z = Math.random() * 0.00005 - 0.002
+		
+	for (let j = 0; j < all.length; j++) {
+		let movement = Math.random() * 0.7
+		all[j][0].position.y += movement
 		all[j][1].position.y += movement
+
+		//all[j][1].rotation.x += rot_x
+		//all[j][1].rotation.z += rot_z
+		all[j][1].rotation.y += 0.05
+		
 
 		if (all[j][0].position.y >= 50) {
 			all[j][0].position.y = -50
 			all[j][1].position.y = -50
 		}
-	}
-	//matrix.makeRotationY(clock.getDelta() * 2 * Math.PI / period);
-	//camera.position.applyMatrix4(matrix);	
-	//camera.lookAt(0, 0, 0);	
-	//console.log(equator.rotation)
+	}*/
+
+	
 	
 	renderer.render( scene, camera );
 }
