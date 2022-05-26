@@ -6,9 +6,8 @@ import { RGBELoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/l
 //starter
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff);
-const camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 0.1, 1000 );
-camera.position.z = -30;
-camera.position.y = 6;
+const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.01, 1000 );
+camera.position.set(0, 0, 5)
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
@@ -33,70 +32,68 @@ const sphereMaterial = new THREE.MeshPhysicalMaterial({color: 0xdce0e6,
 const equatorMaterial = new THREE.MeshStandardMaterial({color: 0x242526, metalness:1, 
 	opacity:0.8, roughness:0.8} )
 
-const loader = new GLTFLoader();                                                                                        
 
-let ball;
-let geometry;
-
-loader.load( './ball.gltf', function ( gltf ) { //load sphere
-	gltf.scene.traverse(function(model) {
-		if (model.isMesh) {
-			model.castShadow = true;
-			model.material = sphereMaterial;
-			
-		}
-	});
-
-	ball = gltf.scene
-	ball.scale.set(5, 5, 5)
-	geometry = ball.geometry
-	
-	//scene.add( ball )	
-}, undefined, function ( error ) {
-	console.error( error );
-} );
-
-
-const randomizeMatrix = function () {
-
-	const position = new THREE.Vector3();
-	const rotation = new THREE.Euler();
-	const quaternion = new THREE.Quaternion();
-	const scale = new THREE.Vector3();
-
-	return function ( matrix ) {
-
-		position.x = Math.random() * 40 - 20;
-		position.y = Math.random() * 40 - 20;
-		position.z = Math.random() * 40 - 20;
-
-		rotation.x = Math.random() * 2 * Math.PI;
-		rotation.y = Math.random() * 2 * Math.PI;
-		rotation.z = Math.random() * 2 * Math.PI;
-
-		quaternion.setFromEuler( rotation );
-
-		scale.x = scale.y = scale.z = Math.random() * 1;
-
-		matrix.compose( position, quaternion, scale );
-
-	};
-
-}();
-
-
+const geometry = new THREE.SphereGeometry(10, 64, 64)
 
 const mesh = new THREE.InstancedMesh(geometry, sphereMaterial, 10)
 const matrix = new THREE.Matrix4()
-
-for ( let i = 0; i < 10; i ++ ) {
-
-	randomizeMatrix( matrix );
-	mesh.setMatrixAt( i, matrix );
-
-}
-
 scene.add(mesh);
+
+
+const matrixDummy = new THREE.Object3D();
+
+const instanceData = [...Array(10)].map(() => {
+  const position = new THREE.Vector3(
+	1.5 * (-1 + 2 * Math.random()),
+	1.5 * (-1 + 2 * Math.random()),
+	0.2 + (-1 + 2 * Math.random())
+  );
+
+  const rotation = new THREE.Euler(
+	Math.random() * Math.PI * 2,
+	Math.random() * Math.PI * 2,
+	Math.random() * Math.PI * 2
+  );
+
+  const axis = new THREE.Vector3(
+	Math.random() * 2 - 1,
+	Math.random() * 2 - 1,
+	Math.random() * 2 - 1
+  );
+
+  const BASE_SCALE = 0.2;
+  const scale = BASE_SCALE * (0.25 + 0.75 * Math.random());
+
+  const rotateTime = 5 + 15 * Math.random();
+
+  return {
+	position,
+	rotation,
+	axis,
+	scale: new THREE.Vector3(scale, scale, scale),
+	rotateTime
+  };
+});
+
+const updateInstances = (deltaTime) => {
+    for (let i = 0; i < MESH_COUNT; i++) {
+      const data = instanceData[i];
+
+      matrixDummy.position.copy(data.position);
+      matrixDummy.scale.copy(data.scale);
+      matrixDummy.quaternion.setFromEuler(data.rotation);
+      if (options.enableRotation) {
+        matrixDummy.rotateOnWorldAxis(data.axis, deltaTime / data.rotateTime);
+        data.rotation.copy(matrixDummy.rotation);
+      }
+      matrixDummy.updateMatrix();
+      mesh.setMatrixAt(i, matrixDummy.matrix);
+    }
+    mesh.instanceMatrix.needsUpdate = true;
+  };
+
+
+
 
 //light
 const light = new THREE.AmbientLight( 0xffffff );
