@@ -33,64 +33,9 @@ const equatorMaterial = new THREE.MeshStandardMaterial({color: 0x242526, metalne
 	opacity:0.8, roughness:0.8} )
 
 
-const geometry = new THREE.SphereGeometry(10, 64, 64)
-
-const mesh = new THREE.InstancedMesh(geometry, sphereMaterial, 10)
-const matrix = new THREE.Matrix4()
-scene.add(mesh);
+//const geometry = new THREE.SphereGeometry(10, 64, 64)
 
 
-const matrixDummy = new THREE.Object3D();
-
-const instanceData = [...Array(10)].map(() => {
-  const position = new THREE.Vector3(
-	1.5 * (-1 + 2 * Math.random()),
-	1.5 * (-1 + 2 * Math.random()),
-	0.2 + (-1 + 2 * Math.random())
-  );
-
-  const rotation = new THREE.Euler(
-	Math.random() * Math.PI * 2,
-	Math.random() * Math.PI * 2,
-	Math.random() * Math.PI * 2
-  );
-
-  const axis = new THREE.Vector3(
-	Math.random() * 2 - 1,
-	Math.random() * 2 - 1,
-	Math.random() * 2 - 1
-  );
-
-  const BASE_SCALE = 0.2;
-  const scale = BASE_SCALE * (0.25 + 0.75 * Math.random());
-
-  const rotateTime = 5 + 15 * Math.random();
-
-  return {
-	position,
-	rotation,
-	axis,
-	scale: new THREE.Vector3(scale, scale, scale),
-	rotateTime
-  };
-});
-
-const updateInstances = (deltaTime) => {
-    for (let i = 0; i < MESH_COUNT; i++) {
-      const data = instanceData[i];
-
-      matrixDummy.position.copy(data.position);
-      matrixDummy.scale.copy(data.scale);
-      matrixDummy.quaternion.setFromEuler(data.rotation);
-      if (options.enableRotation) {
-        matrixDummy.rotateOnWorldAxis(data.axis, deltaTime / data.rotateTime);
-        data.rotation.copy(matrixDummy.rotation);
-      }
-      matrixDummy.updateMatrix();
-      mesh.setMatrixAt(i, matrixDummy.matrix);
-    }
-    mesh.instanceMatrix.needsUpdate = true;
-  };
 
 
 
