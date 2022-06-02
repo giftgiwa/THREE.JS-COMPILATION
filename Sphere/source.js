@@ -12,7 +12,7 @@ camera.position.y = 6;
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
-//renderer.setPixelRatio( window.devicePixelRatio * 2);
+renderer.setPixelRatio( window.devicePixelRatio * 2);
 document.body.appendChild( renderer.domElement );
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -88,6 +88,8 @@ for (let i = 0; i < 12 ; i++) {
 //light
 const light = new THREE.AmbientLight( 0xffffff );
 scene.add( light );
+
+console.log(all[0][0].position)
 
 
 //render
