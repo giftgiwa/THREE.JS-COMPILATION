@@ -11,7 +11,6 @@ camera.position.set(0, 0, 5)
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
-//renderer.setPixelRatio( window.devicePixelRatio * 2);
 document.body.appendChild( renderer.domElement );
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -33,11 +32,22 @@ const equatorMaterial = new THREE.MeshStandardMaterial({color: 0x242526, metalne
 	opacity:0.8, roughness:0.8} )
 
 
-//const geometry = new THREE.SphereGeometry(10, 64, 64)
+let ball;
 
+const loader = new GLTFLoader()
 
-
-
+loader.load( './ball.gltf', function ( gltf ) { //load sphere
+	gltf.scene.traverse(function(model) {
+		if (model.isMesh) {
+			//model.castShadow = true;
+			ball = model.geometry
+		}
+	});
+	let mesh = new THREE.InstancedMesh(ball, equatorMaterial, 20)
+	scene.add( mesh )	
+}, undefined, function ( error ) {
+	console.error( error );
+} );
 
 
 //light
@@ -47,29 +57,7 @@ scene.add( light );
 //render
 function animate() {
 	requestAnimationFrame( animate );
-	//camera.lookAt(0, 0, 60)
 	
-	/*for (let j = 0; j < all.length; j++) {
-		let rot_x = Math.random() * 0.00005 - 0.2
-		let rot_z = Math.random() * 0.00005 - 0.2
-		let movement = Math.random() * 0.2
-		all[j][0].position.y += movement
-
-		all[j][1].rotation.x += rot_x
-		all[j][1].rotation.z += rot_z
-		all[j][1].rotation.y += 0.05
-		all[j][1].position.y += movement
-
-		if (all[j][0].position.y >= 50) {
-			all[j][0].position.y = -50
-			all[j][1].position.y = -50
-		}
-	}*/
-
-	//matrix.makeRotationY(clock.getDelta() * 2 * Math.PI / period);
-	//camera.position.applyMatrix4(matrix);	
-	//camera.lookAt(0, 0, 0);	
-	//console.log(equator.rotation)
 	
 	renderer.render( scene, camera );
 }
