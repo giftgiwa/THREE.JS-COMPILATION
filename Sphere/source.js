@@ -32,18 +32,32 @@ const equatorMaterial = new THREE.MeshStandardMaterial({color: 0x242526, metalne
 	opacity:0.8, roughness:0.8} )
 
 
-let ball;
-
+let mesh;
+let geometry;
 const loader = new GLTFLoader()
 
+
+//loading gltf model
 loader.load( './ball.gltf', function ( gltf ) { //load sphere
+	
 	gltf.scene.traverse(function(model) {
 		if (model.isMesh) {
 			//model.castShadow = true;
-			ball = model.geometry
+			geometry = model.geometry
 		}
 	});
-	let mesh = new THREE.InstancedMesh(ball, equatorMaterial, 20)
+
+	gltf.scene.children[0].material = sphereMaterial
+	//mesh = gltf.scene
+
+	mesh = new THREE.InstancedMesh(gltf.scene.children[0].geometry, equatorMaterial, 5)
+
+	console.log(mesh)
+	//mesh.children.push(new THREE.Mesh(gltf.scene.children[0].geometry, equatorMaterial))
+
+	console.log(mesh.children)
+	mesh.instanceMatrix.setUsage( THREE.DynamicDrawUsage )
+
 	scene.add( mesh )	
 }, undefined, function ( error ) {
 	console.error( error );
@@ -56,8 +70,7 @@ scene.add( light );
 
 //render
 function animate() {
-	requestAnimationFrame( animate );
-	
+	requestAnimationFrame( animate );	
 	
 	renderer.render( scene, camera );
 }
