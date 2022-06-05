@@ -28,37 +28,21 @@ const hdrEquirect = new RGBELoader().load(
 const sphereMaterial = new THREE.MeshPhysicalMaterial({color: 0xdce0e6, 
 	metalness:0, opacity:1.0, transmission:1, envMap: hdrEquirect, 
 	roughness:0, depthTest: true} )
-const equatorMaterial = new THREE.MeshStandardMaterial({color: 0x242526, metalness:1, 
-	opacity:0.8, roughness:0.8} )
-
+/*const equatorMaterial = new THREE.MeshStandardMaterial({color: 0x242526, metalness:1, 
+	opacity:0.8, roughness:0.8} )*/
 
 let mesh;
 let geometry;
 const loader = new GLTFLoader()
 
-
 //loading gltf model
 loader.load( './ball.gltf', function ( gltf ) { //load sphere
-	
-	gltf.scene.traverse(function(model) {
-		if (model.isMesh) {
-			//model.castShadow = true;
-			geometry = model.geometry
-		}
-	});
 
 	gltf.scene.children[0].material = sphereMaterial
-	//mesh = gltf.scene
 
-	mesh = new THREE.InstancedMesh(gltf.scene.children[0].geometry, equatorMaterial, 5)
-
-	console.log(mesh)
-	//mesh.children.push(new THREE.Mesh(gltf.scene.children[0].geometry, equatorMaterial))
-
-	console.log(mesh.children)
-	mesh.instanceMatrix.setUsage( THREE.DynamicDrawUsage )
-
+	mesh = gltf.scene
 	scene.add( mesh )	
+
 }, undefined, function ( error ) {
 	console.error( error );
 } );
