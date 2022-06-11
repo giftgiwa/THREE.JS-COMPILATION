@@ -1,6 +1,6 @@
 import * as THREE from 'https://cdn.skypack.dev/three@0.129.0/build/three.module.js';
 import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js';
-import {OrbitControls} from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/OrbitControls.js'
+//import {OrbitControls} from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/OrbitControls.js'
 import { RGBELoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/RGBELoader.js';
 
 //starter
@@ -36,7 +36,7 @@ const sphereMaterial = new THREE.MeshPhysicalMaterial({color: 0xdce0e6,
 const manager = new THREE.LoadingManager();
 const loader = new GLTFLoader(manager);
                                                                                                                   
-let all = [...Array(12)].map((e) => new THREE.Mesh()) //array of spheres/equators
+let all = [...Array(12)].map((e) => new THREE.Mesh()) //array of spheres/equators; for now, everthing is blank Meshes
 console.log(all)
 
 let positions = [] 
@@ -47,12 +47,12 @@ manager.onLoad = (e) => {
 }
 
 //loading models
-for (let i = 0; i < 10 ; i++) {
+for (let i = 0; i < 12; i++) {
 	
 	let scale = Math.floor(Math.random() * 3) + 1
-	let pos_x = Math.floor(Math.random() * 9) * 4 - 20
-	let pos_y = Math.floor(Math.random() * 9) * 4 - 20
-	let pos_z = Math.floor(Math.random() * 9) * 4 - 20
+	let pos_x = Math.floor(Math.random() * 9) * 4 - 15
+	let pos_y = Math.floor(Math.random() * 9) * 4 - 15
+	let pos_z = Math.floor(Math.random() * 9) * 4 - 15
 
 	loader.load( './ball.gltf', function ( gltf ) { //load sphere
 		gltf.scene.traverse(function(model) {
@@ -67,9 +67,7 @@ for (let i = 0; i < 10 ; i++) {
 		all[i].position.set(pos_x, pos_y, pos_z)
 		all[i].scale.set(scale, scale, scale)
 
-		//console.log(all[i].position)
-		positions.push(all[i].position.distanceTo(new THREE.Vector3(0, all[i].position.y, 0))) 
-		//^log of distances between meshes and y-axis
+		positions.push(all[i].position.distanceTo(new THREE.Vector3(0, all[i].position.y, 0))) //log distances between meshes and y-axis
 
 		scene.add( all[i] )	
 		
@@ -86,6 +84,12 @@ let x = 0
 let z = 0
 let theta = 0
 
+let frequencies = []
+
+for (let k = 0; k < all.length; k++) {
+	frequencies.push((Math.random() * 5))
+}
+
 //render
 function animate() {
 
@@ -95,28 +99,14 @@ function animate() {
 	x += 0.01
 	z += 0.01
 	theta += 0.01
-
-	//let rot_z = Math.random() * 0.00005 - 0.002
 		
 	for (let j = 0; j < all.length; j++) {
-		//let movement = Math.random() * 0.1
-		//all[j].position.y += movement
 		
-		let frequency = Math.ceil(Math.random() * 3)
-		all[j].position.x = positions[j] * Math.cos(theta)
-		all[j].position.z = positions[j] * Math.sin(theta)
+		all[j].position.x = positions[j] * Math.cos(frequencies[j] * theta)
+		all[j].position.z = positions[j] * Math.sin(frequencies[j] * theta)
 
-		all[j].rotation.y += 0.05	
-
-		/*
-		if (all[j].position.y >= 30) {
-			all[j].position.y = -30
-		}
-		*/
+		all[j].rotation.y += 0.05
 	}
-
-	
-	
 	renderer.render( scene, camera );
 }
 animate()
