@@ -10,6 +10,8 @@ const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.inner
 camera.position.z = -60;
 camera.position.y = 6;
 
+console.log(window.innerWidth / window.innerHeight)
+
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.setPixelRatio( window.devicePixelRatio * 4);
@@ -37,7 +39,6 @@ const manager = new THREE.LoadingManager();
 const loader = new GLTFLoader(manager);
                                                                                                                   
 let all = [...Array(12)].map((e) => new THREE.Mesh()) //array of spheres/equators; for now, everthing is blank Meshes
-console.log(all)
 
 let positions = [] 
 
@@ -50,9 +51,9 @@ manager.onLoad = (e) => {
 for (let i = 0; i < 12; i++) {
 	
 	let scale = Math.floor(Math.random() * 3) + 1
-	let pos_x = Math.floor(Math.random() * 9) * 4 - 15
+	let pos_x = Math.floor(Math.random() * 9) * 4 * (window.innerWidth / window.innerHeight) - 15
 	let pos_y = Math.floor(Math.random() * 9) * 4 - 15
-	let pos_z = Math.floor(Math.random() * 9) * 4 - 15
+	let pos_z = Math.floor(Math.random() * 9) * 4 * (window.innerWidth / window.innerHeight) - 15
 
 	loader.load( './ball.gltf', function ( gltf ) { //load sphere
 		gltf.scene.traverse(function(model) {
