@@ -43,10 +43,11 @@ let positions = []
 
 manager.onLoad = (e) => {
 	console.log("loading complete!")
-	
+	console.log(positions)
 }
 
-for (let i = 0; i < 12 ; i++) {
+//loading models
+for (let i = 0; i < 10 ; i++) {
 	
 	let scale = Math.floor(Math.random() * 3) + 1
 	let pos_x = Math.floor(Math.random() * 9) * 4 - 20
@@ -81,32 +82,37 @@ for (let i = 0; i < 12 ; i++) {
 const light = new THREE.AmbientLight( 0xffffff );
 scene.add( light );
 
+let x = 0
+let z = 0
+let theta = 0
 
 //render
 function animate() {
-
-	let x = 0
-	let z = 0
 
 	requestAnimationFrame( animate );
 	camera.lookAt(0, 0, 60)
 
 	x += 0.01
 	z += 0.01
-	let rot_x = Math.random() * 0.00005 - 0.002
-	let rot_z = Math.random() * 0.00005 - 0.002
+	theta += 0.01
+
+	//let rot_z = Math.random() * 0.00005 - 0.002
 		
 	for (let j = 0; j < all.length; j++) {
-		let movement = Math.random() * 0.1
+		//let movement = Math.random() * 0.1
 		//all[j].position.y += movement
+		
+		let frequency = Math.ceil(Math.random() * 3)
+		all[j].position.x = positions[j] * Math.cos(theta)
+		all[j].position.z = positions[j] * Math.sin(theta)
 
-		//all[j].rotation.x += rot_x
-		//all[j].rotation.z += rot_z
 		all[j].rotation.y += 0.05	
 
+		/*
 		if (all[j].position.y >= 30) {
 			all[j].position.y = -30
 		}
+		*/
 	}
 
 	
