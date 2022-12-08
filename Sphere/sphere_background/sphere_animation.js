@@ -1,4 +1,4 @@
-import * as THREE from 'https://cdn.skypack.dev/three@0.129.0/build/three.module.js';
+import * as THREE from 'https://cdn.skypack.dev/three@0.129.0/ild/three.module.js';
 import { GLTFLoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js';
 import {OrbitControls} from 'https://threejsfundamentals.org/threejs/resources/threejs/r122/examples/jsm/controls/OrbitControls.js'
 import { RGBELoader } from 'https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/RGBELoader.js';
@@ -13,16 +13,16 @@ three()
 function three() {
 
 	const scene = new THREE.Scene();
-	//scene.background = new THREE.Color(0xf7f7f7);
+	scene.background = new THREE.Color(0xffffff);
 	const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
-	console.log(window.innerWidth * window.innerHeight)
+	
 
 	//readjust camera to focus on spheres
 	camera.position.z = -60;
 	camera.position.y = 6;
 	camera.lookAt(0, 0, 100)
 
-	const renderer = new THREE.WebGLRenderer({alpha: true }) // {alpha: true} makes the background transparent
+	const renderer = new THREE.WebGLRenderer() // {alpha: true} makes the background transparent
 
 	renderer.setSize( /*0.666 * */ window.innerWidth, /*0.666 * */window.innerHeight)
 	renderer.setPixelRatio( window.devicePixelRatio);
@@ -37,21 +37,23 @@ function three() {
 	);
 
 	//orbit controls
-	const controls = new OrbitControls( camera, renderer.domElement );
+	//const controls = new OrbitControls( camera, renderer.domElement );
 
 	//materials
+
+	// "glass"
 	const sphereMaterial = new THREE.MeshPhysicalMaterial({
-		color: 0xffffff, 
+		metalness:0,
 		transmission:1,
 		envMap: hdrEquirect, 
 		roughness:0, 
 		depthTest: true
 	})
 
+	// for personal website
 	const sphereMaterial_2 = new THREE.MeshBasicMaterial({
-		color: 0x000000,
-		metalness:1, 
-		opacity:0.8, 
+		color: 0xffff00, 
+		opacity:0.1, 
 		roughness:0.8
 	})
 
@@ -107,7 +109,7 @@ function three() {
 		
 			const matrix = new THREE.Matrix4() //not the same as matrix defined above!
 
-			mesh = new THREE.InstancedMesh( gltf.scene.children[0].geometry, sphereMaterial, count )
+			mesh = new THREE.InstancedMesh( gltf.scene.children[0].geometry, sphereMaterial_2, count )
 			mesh.instanceMatrix.setUsage( THREE.DynamicDrawUsage )
 
 			mesh_2 = new THREE.InstancedMesh( gltf.scene.children[1].geometry, gltf.scene.children[1].material, count )
