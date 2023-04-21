@@ -6,11 +6,11 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xffffff);
 const camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.position.z = 15;
-camera.position.y = 4;
+camera.position.y = 10;
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
-renderer.setPixelRatio( window.devicePixelRatio * 2);
+// renderer.setPixelRatio( window.devicePixelRatio * 2);
 document.body.appendChild( renderer.domElement );
 renderer.shadowMap.enabled = true
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -39,7 +39,7 @@ const plane = new THREE.Mesh( new THREE.PlaneGeometry(10000, 10000), new THREE.M
 plane.castShadow = true;
 plane.receiveShadow = true
 plane.rotation.x=THREE.Math.degToRad(-90)
-scene.add( plane );
+// scene.add( plane );
 
 let light = new THREE.DirectionalLight( 0xffffff ); //light
 light.position.set( 7,7,7);
@@ -61,7 +61,9 @@ scene.add( hemiLight );
 
 function animate() { //render
 	requestAnimationFrame( animate );
-	//crown.rotation.y+=0.005
+	crown.rotation.y+=0.06
+	// crown.rotation.x+=0.03
+	// crown.rotation.z+=0.03
 	renderer.render( scene, camera );
 }
 animate();

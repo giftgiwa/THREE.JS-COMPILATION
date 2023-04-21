@@ -27,8 +27,8 @@ function three() {
 	renderer.setSize( /*0.666 * */ window.innerWidth, /*0.666 * */window.innerHeight)
 	renderer.setPixelRatio( window.devicePixelRatio);
 	
-	//document.body.appendChild( renderer.domElement );
-	document.getElementById('canvas').appendChild( renderer.domElement )
+	document.body.appendChild( renderer.domElement );
+	// document.getElementById('canvas').appendChild( renderer.domElement )
 
 	//HDRI MAP
 	const hdrEquirect = new RGBELoader().load(
@@ -37,7 +37,7 @@ function three() {
 	);
 
 	//orbit controls
-	//const controls = new OrbitControls( camera, renderer.domElement );
+	const controls = new OrbitControls( camera, renderer.domElement );
 
 	//materials
 
